@@ -1,4 +1,4 @@
-#Sun Jun 21 16:57:48 BRT 2020
-base.0=/home/paulo/Área de Trabalho/programacao/gostack/nivel-03/gobarberapp/android/app/build/intermediates/dex/debug/mergeDexDebug/out/classes.dex
+#Mon Aug 17 11:28:14 BRT 2020
+base.0=/home/paulo/Área de Trabalho/programacao/gostack/nivel-05/gobarberapp/android/app/build/intermediates/dex/debug/mergeDexDebug/out/classes.dex
 path.0=classes.dex
 renamed.0=classes.dex

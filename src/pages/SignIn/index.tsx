@@ -1,20 +1,23 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 import {
   Image,
   KeyboardAvoidingView,
   Platform,
   View,
   ScrollView,
-  Keyboard,
+  TextInput,
 } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
 import { Form } from '@unform/mobile';
 import { FormHandles } from '@unform/core';
 import Icon from 'react-native-vector-icons/Feather';
+import * as Yup from 'yup';
+
+import getValidationError from '../../utils/getValidationErros';
+import { useAuth } from '../../hooks/auth';
 
 import ImgLogo from '../../assets/logo.png';
-
 import Input from '../../components/Input';
 import Button from '../../components/Button';
 
@@ -27,27 +30,44 @@ import {
   CreateAccountButtonText,
 } from './styles';
 
+interface SignInFormData {
+  email: string;
+  password: string;
+}
+
 const SignIn: React.FC = () => {
-  const [keyboardActived, setkeyboardActived] = useState(false);
   const navigation = useNavigation();
   const formRef = useRef<FormHandles>(null);
+  const passwordInputRef = useRef<TextInput>(null);
 
-  useEffect(() => {
-    Keyboard.addListener('keyboardDidShow', () => {
-      setkeyboardActived(true);
-    });
+  const { signIn } = useAuth();
 
-    Keyboard.addListener('keyboardDidHide', () => {
-      setkeyboardActived(false);
-    });
+  const handleSubmit = useCallback(
+    async (data: SignInFormData) => {
+      try {
+        formRef.current?.setErrors({});
 
-    return () => {
-      Keyboard.removeAllListeners('keyboardDidShow');
-      Keyboard.removeAllListeners('keyboardDidHide');
-    };
-  }, [keyboardActived]);
+        const schema = Yup.object().shape({
+          email: Yup.string()
+            .required('E-mail obrigatório')
+            .email('Digite um e-mail válido'),
 
-  const handleSubmit = useCallback((data: any) => console.log(data), []);
+          password: Yup.string().min(6, 'Mínimo 6 caracteres'),
+        });
+
+        await schema.validate(data, {
+          abortEarly: false,
+        });
+
+        await signIn({ email: data.email, password: data.password });
+      } catch (err) {
+        const erros = getValidationError(err);
+
+        formRef.current?.setErrors(erros);
+      }
+    },
+    [signIn],
+  );
 
   return (
     <>
@@ -66,8 +86,27 @@ const SignIn: React.FC = () => {
               <Title>Faça seu Logon</Title>
             </View>
             <Form ref={formRef} onSubmit={handleSubmit}>
-              <Input name="email" icon="mail" placeholder="Email" />
-              <Input name="password" icon="lock" placeholder="Senha" />
+              <Input
+                keyboardType="email-address"
+                autoCapitalize="none"
+                autoCorrect={false}
+                name="email"
+                icon="mail"
+                placeholder="Email"
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  passwordInputRef.current?.focus();
+                }}
+              />
+              <Input
+                ref={passwordInputRef}
+                secureTextEntry
+                name="password"
+                icon="lock"
+                placeholder="Senha"
+                returnKeyType="send"
+                onSubmitEditing={() => formRef.current?.submitForm()}
+              />
 
               <Button onPress={() => formRef.current?.submitForm()}>
                 Entrar
@@ -79,12 +118,11 @@ const SignIn: React.FC = () => {
           </Container>
         </ScrollView>
       </KeyboardAvoidingView>
-      {!keyboardActived && (
-        <CreateAccountButton onPress={() => navigation.navigate('SignUp')}>
-          <Icon name="log-in" size={20} color="#ff9000" />
-          <CreateAccountButtonText>Criar uma conta</CreateAccountButtonText>
-        </CreateAccountButton>
-      )}
+
+      <CreateAccountButton onPress={() => navigation.navigate('SignUp')}>
+        <Icon name="log-in" size={20} color="#ff9000" />
+        <CreateAccountButtonText>Criar uma conta</CreateAccountButtonText>
+      </CreateAccountButton>
     </>
   );
 };
