@@ -92,7 +92,7 @@ const SignIn: React.FC = () => {
                 autoCorrect={false}
                 name="email"
                 icon="mail"
-                placeholder="Email"
+                placeholder="E-mail"
                 returnKeyType="next"
                 onSubmitEditing={() => {
                   passwordInputRef.current?.focus();
