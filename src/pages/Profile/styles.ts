@@ -3,7 +3,8 @@ import styled from 'styled-components/native';
 export const Container = styled.View`
   flex: 1;
   align-items: center;
-  margin: 0px 40px;
+  justify-content: center;
+  margin: 0px 40px 100px;
 `;
 
 export const Header = styled.View`
