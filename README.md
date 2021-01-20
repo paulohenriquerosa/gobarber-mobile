@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img alt="Logo" src="https://res.cloudinary.com/eliasgcf/image/upload/v1588625369/GoBarber/logo_iw1v9f.svg" width="200px">
+  <img alt="Logo" src="https://github.com/paulohenriquerosa/gobarber-mobile/blob/master/img/logo.png" width="200px">
 </h1>
 
 <h3 align="center">
@@ -34,6 +34,10 @@
   <a href="#-getting-started">Getting started</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#-how-to-contribute">How to contribute</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
   <a href="#-license">License</a>
+</p>
+
+<p align="center">
+  <img alt="Layout" src="https://github.com/paulohenriquerosa/gobarber-mobile/blob/master/img/mobile.png">
 </p>
 
 ## 💇🏻‍♂️ About the project
